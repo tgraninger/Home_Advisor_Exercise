@@ -13,10 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
 
-
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
-		let viewController = UIViewController(nibName: "ProsViewController", bundle: nil)
+		let viewController = GroupedProsTableViewController()
 		
 		let navigationController = UINavigationController(rootViewController: viewController)
 		

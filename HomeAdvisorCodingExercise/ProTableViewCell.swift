@@ -10,15 +10,22 @@ import UIKit
 
 class ProTableViewCell: UITableViewCell {
 
+	@IBOutlet weak var proNameLabel: UILabel!
+	@IBOutlet weak var proRatingLabel: UILabel!
+	
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
+	
+	func setCellData(_ pro: Pro) {
+		proNameLabel.text = pro.companyName
+		
+		proRatingLabel.text = setRatingLabelText(ratingCount: pro.ratingCount, rating: pro.compositeRating)
+		proRatingLabel.textColor = setRatingLabelColor(rating: pro.compositeRating)
+	}
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
 }

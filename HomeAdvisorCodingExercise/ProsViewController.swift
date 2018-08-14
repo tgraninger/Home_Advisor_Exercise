@@ -10,44 +10,51 @@ import UIKit
 
 class ProsViewController: UIViewController {
 
+	@IBOutlet weak var prosTableView: UITableView!
+	
+	var dataStore: [Pro]?
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+		
+		JSONDataClient().fetchProData { (pros) in
+			//self.dataStore = pros
+			self.prosTableView.reloadData()
+		}
+		
+		self.navigationItem.title = "Pros"
+		
+		self.tableViewSetup()
     }
+	
+	func tableViewSetup() {
+		prosTableView.rowHeight = UITableViewAutomaticDimension
+		prosTableView.estimatedRowHeight = 60
+		
+		prosTableView.register(UINib(nibName: "ProTableViewCell", bundle: nil), forCellReuseIdentifier: "ProTableViewCell")
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension ProsViewController: UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return 0
+		return 1
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 0
+		return dataStore?.count ?? 0
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "", for: indexPath)
+		let cell = tableView.dequeueReusableCell(withIdentifier: "ProTableViewCell", for: indexPath) as! ProTableViewCell
 		
+		let pro: Pro = dataStore![indexPath.row]
 		
+		cell.setCellData(pro)
 		
 		return cell
 	}
@@ -56,6 +63,12 @@ extension ProsViewController: UITableViewDataSource {
 extension ProsViewController: UITableViewDelegate {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: true)
 		
+		let detailsViewController = DetailsViewController()
+		
+		detailsViewController.selectedPro = dataStore![indexPath.row]
+		
+		self.navigationController?.pushViewController(detailsViewController, animated: true)
 	}
 }
